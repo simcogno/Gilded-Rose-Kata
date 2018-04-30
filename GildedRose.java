@@ -12,55 +12,51 @@ class GildedRose {
         	
         	Item currentItem = items[i];
         	
-            if (itemIsCommonOrSulfuras(currentItem)) {
-                if (currentItem.quality > 0) {
-                    if (itemIsCommonItem(currentItem)) {
-                        currentItem.quality--;
-                    }
+            if (itemIsCommonItem(currentItem)) {
+                decreaseItemQuality(currentItem);
+            } else if (itemIsBackstagePasses(currentItem)) {
+            	increaseItemQuality(currentItem);
+                if (currentItem.sellIn < 11) {
+                    increaseItemQuality(currentItem);
+                }
+
+                if (currentItem.sellIn < 6) {
+                    increaseItemQuality(currentItem);
                 }
             } else {
-                if (currentItem.quality < 50) {
-                    currentItem.quality++;
-
-                    if (itemIsBackstagePasses(currentItem)) {
-                        if (currentItem.sellIn < 11) {
-                            if (currentItem.quality < 50) {
-                                currentItem.quality++;
-                            }
-                        }
-
-                        if (currentItem.sellIn < 6) {
-                            if (currentItem.quality < 50) {
-                                currentItem.quality++;
-                            }
-                        }
-                    }
-                }
+            	increaseItemQuality(currentItem);
             }
-
-            if (!itemIsSulfuras(currentItem)) {
-                currentItem.sellIn--;
-            }
+            	
+            
+            decreaseItemSellIn(currentItem);
+            
 
             if (currentItem.sellIn < 0) {
-                if (!itemIsAgedBrie(currentItem)) {
-                    if (!itemIsBackstagePasses(currentItem)) {
-                        if (currentItem.quality > 0) {
-                            if (!itemIsSulfuras(currentItem)) {
-                                currentItem.quality--;
-                            }
-                        }
-                    } else {
-                        currentItem.quality = currentItem.quality - currentItem.quality;
-                    }
+                if (itemIsCommonItem(currentItem)) {
+                    decreaseItemQuality(currentItem);                                                                         
                 } else {
-                    if (currentItem.quality < 50) {
-                        currentItem.quality++;
-                    }
+                    increaseItemQuality(currentItem);
                 }
             }
         }
     }
+
+	private void decreaseItemSellIn(Item currentItem) {
+		if(!itemIsSulfuras(currentItem))
+			currentItem.sellIn--;
+	}
+
+	private void increaseItemQuality(Item currentItem) {
+		if (currentItem.quality < 50) {
+		    currentItem.quality++;
+		}
+	}
+
+	private void decreaseItemQuality(Item currentItem) {
+		if (currentItem.quality > 0) {
+		        currentItem.quality--;              
+		}
+	}
 
 	private boolean itemIsAgedBrie(Item item) {
 		return (item instanceof AgedBrie);
@@ -78,8 +74,4 @@ class GildedRose {
 		return (item instanceof CommonItem);
 	}
 
-	private boolean itemIsCommonOrSulfuras(Item item) {
-		return itemIsCommonItem(item)
-		        || itemIsSulfuras(item);
-	}
 }
