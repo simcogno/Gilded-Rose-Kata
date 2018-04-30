@@ -113,7 +113,9 @@ public class GildedRoseTest {
     			("Backstage passes to a TAFKAL80ETC concert", 5, 20));
     	app.update();
         assertEquals(23, app.items[0].quality);
-    } 
+    }
+    
+    
     
       
 }

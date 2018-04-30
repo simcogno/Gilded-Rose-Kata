@@ -9,54 +9,77 @@ class GildedRose {
 
     public void update() {
         for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals("Aged Brie")
-                    && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                if (items[i].quality > 0) {
-                    if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                        items[i].quality = items[i].quality - 1;
+        	
+        	Item currentItem = items[i];
+        	
+            if (itemIsCommonOrSulfuras(currentItem)) {
+                if (currentItem.quality > 0) {
+                    if (itemIsCommonItem(currentItem)) {
+                        currentItem.quality--;
                     }
                 }
             } else {
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
+                if (currentItem.quality < 50) {
+                    currentItem.quality++;
 
-                    if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
+                    if (itemIsBackstagePasses(currentItem)) {
+                        if (currentItem.sellIn < 11) {
+                            if (currentItem.quality < 50) {
+                                currentItem.quality++;
                             }
                         }
 
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
+                        if (currentItem.sellIn < 6) {
+                            if (currentItem.quality < 50) {
+                                currentItem.quality++;
                             }
                         }
                     }
                 }
             }
 
-            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                items[i].sellIn = items[i].sellIn - 1;
+            if (!itemIsSulfuras(currentItem)) {
+                currentItem.sellIn--;
             }
 
-            if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Aged Brie")) {
-                    if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (items[i].quality > 0) {
-                            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                                items[i].quality = items[i].quality - 1;
+            if (currentItem.sellIn < 0) {
+                if (!itemIsAgedBrie(currentItem)) {
+                    if (!itemIsBackstagePasses(currentItem)) {
+                        if (currentItem.quality > 0) {
+                            if (!itemIsSulfuras(currentItem)) {
+                                currentItem.quality--;
                             }
                         }
                     } else {
-                        items[i].quality = items[i].quality - items[i].quality;
+                        currentItem.quality = currentItem.quality - currentItem.quality;
                     }
                 } else {
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
+                    if (currentItem.quality < 50) {
+                        currentItem.quality++;
                     }
                 }
             }
         }
     }
+
+	private boolean itemIsAgedBrie(Item item) {
+		return (item instanceof AgedBrie);
+	}
+
+	private boolean itemIsSulfuras(Item item) {
+		return (item instanceof Sulfuras);
+	}
+
+	private boolean itemIsBackstagePasses(Item item) {
+		return (item instanceof BackstagePasses);
+	}
+
+	private boolean itemIsCommonItem(Item item) {
+		return (item instanceof CommonItem);
+	}
+
+	private boolean itemIsCommonOrSulfuras(Item item) {
+		return itemIsCommonItem(item)
+		        || itemIsSulfuras(item);
+	}
 }
