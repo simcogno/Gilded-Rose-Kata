@@ -12,33 +12,50 @@ class GildedRose {
         	
         	Item currentItem = items[i];
         	
-            if (itemIsCommonItem(currentItem)) {
-                decreaseItemQuality(currentItem);
-            } else if (itemIsBackstagePasses(currentItem)) {
-            	increaseItemQuality(currentItem);
-                if (currentItem.sellIn < 11) {
-                    increaseItemQuality(currentItem);
-                }
+        	if (itemIsCommonItem(currentItem)) 
+                updateCommonItem((CommonItem) currentItem);
+        	
+        	if(itemIsBackstagePasses(currentItem))
+        		updateBackstagePasses((BackstagePasses) currentItem);
+        	
+        	if(itemIsAgedBrie(currentItem))
+        		updateAgedBrie((AgedBrie) currentItem);
+        	
 
-                if (currentItem.sellIn < 6) {
-                    increaseItemQuality(currentItem);
-                }
-            } else {
-            	increaseItemQuality(currentItem);
-            }
-            	
-            
-            decreaseItemSellIn(currentItem);
-            
-
-            if (currentItem.sellIn < 0) {
-                if (itemIsCommonItem(currentItem)) {
-                    decreaseItemQuality(currentItem);                                                                         
-                } else {
-                    increaseItemQuality(currentItem);
-                }
-            }
         }
+    }
+    
+    private void updateCommonItem(CommonItem item) {
+    	decreaseItemQuality(item);
+    	decreaseItemSellIn(item);
+    	if(item.sellIn < 0)
+    		decreaseItemQuality(item);
+    }
+    
+    private void updateBackstagePasses(BackstagePasses item) {
+    	increaseItemQuality(item);
+        if (item.sellIn < 11) {
+            increaseItemQuality(item);
+        }
+
+        if (item.sellIn < 6) {
+            increaseItemQuality(item);
+        }
+        decreaseItemSellIn(item);
+        if(item.sellIn < 0)
+        	increaseItemQuality(item);
+    }
+    
+    private void updateAgedBrie(AgedBrie item) {
+    	increaseItemQuality(item);
+        if(item.sellIn < 0)
+        	increaseItemQuality(item);
+    }
+    
+    private void updateSulfuras(Sulfuras item) {
+    	increaseItemQuality(item);
+        if(item.sellIn < 0)
+        	increaseItemQuality(item);
     }
 
 	private void decreaseItemSellIn(Item currentItem) {
